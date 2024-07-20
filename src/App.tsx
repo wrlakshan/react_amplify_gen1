@@ -1,15 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { generateClient } from 'aws-amplify/api';
+import { generateClient } from "aws-amplify/api";
 
-import { type CreateTodoInput, type Todo } from './API';
-import { createTodo } from './graphql/mutations';
-import { listTodos } from './graphql/queries';
+import { Button, Heading, Text, TextField, View, withAuthenticator } from "@aws-amplify/ui-react";
+import { type UseAuthenticator } from "@aws-amplify/ui-react-core";
+import "@aws-amplify/ui-react/styles.css";
+import { type AuthUser } from "aws-amplify/auth";
+import { type CreateTodoInput, type Todo } from "./API";
+import { createTodo } from "./graphql/mutations";
+import { listTodos } from "./graphql/queries";
 
-const initialState: CreateTodoInput = { name: '', description: '' };
+const initialState: CreateTodoInput = { name: "", description: "" };
 const client = generateClient();
 
-const App = () => {
+type AppProps = {
+  signOut?: UseAuthenticator["signOut"]; //() => void;
+  user?: AuthUser;
+};
+
+const App: React.FC<AppProps> = ({ signOut, user }) => {
   const [formState, setFormState] = useState<CreateTodoInput>(initialState);
   const [todos, setTodos] = useState<Todo[] | CreateTodoInput[]>([]);
 
@@ -25,7 +34,7 @@ const App = () => {
       const todos = todoData.data.listTodos.items;
       setTodos(todos);
     } catch (err) {
-      console.log('error fetching todos');
+      console.log("error fetching todos");
     }
   }
 
@@ -42,39 +51,43 @@ const App = () => {
         },
       });
     } catch (err) {
-      console.log('error creating todo:', err);
+      console.log("error creating todo:", err);
     }
   }
 
+  function setInput(arg: string, value: string): void {
+    setFormState({ ...formState, [arg]: value });
+  }
+
   return (
-    <div style={styles.container}>
-      <h2>Amplify Todos</h2>
-      <input
-        onChange={(event) =>
-          setFormState({ ...formState, name: event.target.value })
-        }
-        style={styles.input}
-        value={formState.name}
+    <View style={styles.container}>
+      <Heading level={1}>Hello {user.username}</Heading>
+      <Button style={styles.button} onClick={signOut}>
+        Sign out
+      </Button>
+      <Heading level={2}>Amplify Todos</Heading>
+      <TextField
         placeholder="Name"
-      />
-      <input
-        onChange={(event) =>
-          setFormState({ ...formState, description: event.target.value })
-        }
+        onChange={(event) => setInput("name", event.target.value)}
         style={styles.input}
-        value={formState.description as string}
-        placeholder="Description"
+        defaultValue={formState.name}
       />
-      <button style={styles.button} onClick={addTodo}>
+      <TextField
+        placeholder="Description"
+        onChange={(event) => setInput("description", event.target.value)}
+        style={styles.input}
+        defaultValue={formState.description}
+      />
+      <Button style={styles.button} onClick={addTodo}>
         Create Todo
-      </button>
+      </Button>
       {todos.map((todo, index) => (
-        <div key={todo.id ? todo.id : index} style={styles.todo}>
-          <p style={styles.todoName}>{todo.name}</p>
-          <p style={styles.todoDescription}>{todo.description}</p>
-        </div>
+        <View key={todo.id ? todo.id : index} style={styles.todo}>
+          <Text style={styles.todoName}>{todo.name}</Text>
+          <Text style={styles.todoDescription}>{todo.description}</Text>
+        </View>
       ))}
-    </div>
+    </View>
   );
 };
 
@@ -106,4 +119,4 @@ const styles = {
   },
 } as const;
 
-export default App;
+export default withAuthenticator(App);
