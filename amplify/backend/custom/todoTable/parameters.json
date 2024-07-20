@@ -1,0 +1,6 @@
+{
+  "tableName": "todoTable",
+  "deletionProtectionEnabled": "false",
+  "pointInTimeRecoveryEnabled": "false",
+  "deletionPolicy": "Delete"
+}

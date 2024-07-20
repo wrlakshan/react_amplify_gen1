@@ -4,11 +4,12 @@ import "@aws-amplify/ui-react/styles.css";
 import { generateClient } from "aws-amplify/api";
 import { type AuthUser } from "aws-amplify/auth";
 import { useCallback, useEffect, useState } from "react";
-import { type CreateTodoInput, type Todo } from "./API";
+import { v4 as uuidv4 } from "uuid";
+import { type Todo, type TodoInput } from "./API";
 import { createTodo, deleteTodo, updateTodo } from "./graphql/mutations";
-import { listTodos } from "./graphql/queries";
+import { getTodos } from "./graphql/queries";
 
-const initialState: CreateTodoInput = { name: "", description: "" };
+const initialState: TodoInput = { id: "", name: "", description: "" };
 const client = generateClient();
 
 type AppProps = {
@@ -17,7 +18,7 @@ type AppProps = {
 };
 
 const App: React.FC<AppProps> = ({ signOut, user }) => {
-  const [formState, setFormState] = useState<CreateTodoInput>(initialState);
+  const [formState, setFormState] = useState<TodoInput>(initialState);
   const [todos, setTodos] = useState<Todo[]>([]);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
 
@@ -27,8 +28,9 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
 
   const fetchTodos = useCallback(async () => {
     try {
-      const { data } = await client.graphql({ query: listTodos });
-      setTodos(data.listTodos.items);
+      const { data } = await client.graphql({ query: getTodos });
+      console.log("🚀 ~ fetchTodos ~ data:", data.getTodos);
+      setTodos(data.getTodos);
     } catch (err) {
       console.error("Error fetching todos:", err);
     }
@@ -41,9 +43,10 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
   const handleAddTodo = async () => {
     if (!formState.name || !formState.description) return;
     try {
+      const newTodo = { ...formState, id: uuidv4() };
       const { data } = await client.graphql({
         query: createTodo,
-        variables: { input: formState },
+        variables: { input: newTodo },
       });
       setTodos([...todos, data.createTodo]);
       setFormState(initialState);

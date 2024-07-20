@@ -42,5 +42,38 @@
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
     }
+  },
+  "custom": {
+    "todoTable": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "customCloudformation"
+    }
+  },
+  "function": {
+    "todoHandlerFunction": {
+      "build": true,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_todoHandlerFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "todoHandlerFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_todoHandlerFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "todoHandlerFunction"
+        }
+      ]
+    }
   }
 }

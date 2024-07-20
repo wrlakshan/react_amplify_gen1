@@ -3,8 +3,37 @@
 input AMPLIFY {
   globalAuthRule: AuthRule = { allow: public }
 } # FOR TESTING ONLY!
-type Todo @model {
+# type Todo @model {
+#   id: ID!
+#   name: String!
+#   description: String
+# }
+
+# type Mutation {
+#   myCustomMutation(args: String): String # your custom mutations here
+# }
+
+# type Query {
+#   myCustomQuery(args: String): String # your custom queries here
+# }
+
+input TodoInput {
   id: ID!
-  name: String!
+  name: String
   description: String
+}
+type Todo {
+  id: ID
+  name: String
+  description: String
+}
+
+type Query {
+  getTodos: [Todo] @function(name: "todoHandlerFunction-${env}")
+}
+
+type Mutation {
+  createTodo(input: TodoInput!): Todo @function(name: "todoHandlerFunction-${env}")
+  updateTodo(input: TodoInput!): Todo @function(name: "todoHandlerFunction-${env}")
+  deleteTodo(input: TodoInput!): Todo @function(name: "todoHandlerFunction-${env}")
 }

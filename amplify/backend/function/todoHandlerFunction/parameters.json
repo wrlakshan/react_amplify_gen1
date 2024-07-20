@@ -1,0 +1,8 @@
+{
+  "customtodoTableName": {
+    "Fn::GetAtt": ["customtodoTable", "Outputs.Name"]
+  },
+  "customtodoTableArn": {
+    "Fn::GetAtt": ["customtodoTable", "Outputs.Arn"]
+  }
+}
