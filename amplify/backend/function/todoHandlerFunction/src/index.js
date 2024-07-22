@@ -19,7 +19,6 @@ const getTodos = async () => {
 };
 
 const createTodo = async (input) => {
-  console.log("🚀 ~ createTodo ~ input:", input);
   const command = new PutCommand({
     TableName: TODO_TABLE,
     Item: input,

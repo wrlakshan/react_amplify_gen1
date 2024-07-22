@@ -51,6 +51,20 @@
     }
   },
   "function": {
+    "GraphQLResolverFunction": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "reactamplifygen1eddd4e5c"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "todoHandlerFunction": {
       "build": true,
       "dependsOn": [],
@@ -59,6 +73,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_GraphQLResolverFunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GraphQLResolverFunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_GraphQLResolverFunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "GraphQLResolverFunction"
+        }
+      ]
+    },
     "AMPLIFY_function_todoHandlerFunction_deploymentBucketName": {
       "usedBy": [
         {

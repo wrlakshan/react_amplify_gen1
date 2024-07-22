@@ -1,0 +1,13 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "reactamplifygen1eddd4e5c": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  }
+}

@@ -25,6 +25,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "GraphQLResolverFunction": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "todoHandlerFunction": {
       "Arn": "string",
       "LambdaExecutionRole": "string",

@@ -22,14 +22,59 @@ input TodoInput {
   name: String
   description: String
 }
+
 type Todo {
   id: ID
   name: String
   description: String
 }
 
+type Comment {
+  postId: ID!
+  content: String
+}
+
+type Post {
+  id: ID!
+  title: String!
+  comments: [Comment] @function(name: "GraphQLResolverFunction-${env}")
+}
+
+# These types derived from https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/CognitoIdentityServiceProvider.html#adminGetUser-property
+type User {
+  Username: String!
+  UserAttributes: [Value]
+  UserCreateDate: String
+  UserLastModifiedDate: String
+  Enabled: Boolean
+  UserStatus: UserStatus
+  MFAOptions: [MFAOption]
+  PreferredMfaSetting: String
+  UserMFASettingList: String
+}
+type Value {
+  Name: String!
+  Value: String
+}
+type MFAOption {
+  DeliveryMedium: String
+  AttributeName: String
+}
+enum UserStatus {
+  UNCONFIRMED
+  CONFIRMED
+  ARCHIVED
+  COMPROMISED
+  UNKNOWN
+  RESET_REQUIRED
+  FORCE_CHANGE_PASSWORD
+}
+
 type Query {
+  me: User @function(name: "GraphQLResolverFunction-${env}")
+  echo(msg: String): String @function(name: "GraphQLResolverFunction-${env}")
   getTodos: [Todo] @function(name: "todoHandlerFunction-${env}")
+  posts: [Post] @function(name: "GraphQLResolverFunction-${env}")
 }
 
 type Mutation {
