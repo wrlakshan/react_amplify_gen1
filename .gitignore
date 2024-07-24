@@ -16,6 +16,9 @@ dist-ssr
 # Amplify team provider file
 amplify/team-provider-info.json
 
+# Deplyment Files
+deploy/*
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

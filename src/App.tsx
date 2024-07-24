@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { type Todo, type TodoInput } from "./API";
 import { createTodo, deleteTodo, updateTodo } from "./graphql/mutations";
-import { getTodos, me } from "./graphql/queries";
+import { getTodos } from "./graphql/queries";
 
 const initialState: TodoInput = { id: "", name: "", description: "" };
 const client = generateClient();
@@ -28,7 +28,7 @@ const App: React.FC<AppProps> = ({ signOut, user }) => {
 
   const fetchTodos = useCallback(async () => {
     try {
-      console.log("🚀 ~ fetchTodos ~ me:", await client.graphql({ query: me }));
+      // console.log("🚀 ~ fetchTodos ~ me:", await client.graphql({ query: me }));
       //doesn't pass the identity
       const { data } = await client.graphql({ query: getTodos });
       setTodos(data.getTodos);
